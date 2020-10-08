@@ -138,7 +138,7 @@ function moveBall() {
 
     // Hit bottom wall you lose
     if(ball.y + ball.size > canvas.height) {
-        alert('You Lost!');
+        alert('You Lost!!');
         showAllBricks();
         score = 0;
     }
