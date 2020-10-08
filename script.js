@@ -97,6 +97,69 @@ function movePaddle() {
     }
 }
 
+// Move ball on canvas
+function moveBall() {
+    ball.x += ball.dx;
+    ball.y += ball.dy;
+
+    // Wall Collision (right/left)
+    if(ball.x + ball.size > canvas.width || ball.x - ball.size < 0) {
+        ball.dx *= -1; // ball.dx = ball.dx * -1
+    }
+
+    // Wall collision (top/bottom)
+    if(ball.y + ball.size > canvas.height || ball.y - ball.size < 0) {
+        ball.dy *= -1;
+    }
+
+
+    // Paddle Collision
+    if(ball.x - ball.size > paddle.x && ball.x + ball.size < paddle.x + paddle.w && ball.y + ball.size > paddle.y) {
+        ball.dy = -ball.speed;
+    }
+
+    // Brick Collision
+    bricks.forEach(column => {
+        column.forEach(bricks => {
+            if(bricks.visible) {
+                if(ball.x - ball.size > bricks.x && // left brck side check
+                    ball.x + ball.size < bricks.x + bricks.w && // right brck side check
+                    ball.y + ball.size > bricks.y && // top brick side check
+                    ball.y - ball.size < bricks.y + bricks.h // bottom brick side check) 
+                ) {
+                    ball.dy *= -1;
+                    bricks.visible = false;
+
+                    increaseScore();
+                }
+            }
+        });
+    });
+
+    // Hit bottom wall you lose
+    if(ball.y + ball.size > canvas.height) {
+        alert('You Lost!');
+        showAllBricks();
+        score = 0;
+    }
+}
+
+// Increase score
+function increaseScore() {
+    score++;
+
+    if(score % (brickRowCount * brickRowCount) === 0) {
+        showAllBricks();
+    }
+}
+
+// Make all bricks appear
+function showAllBricks() {
+    bricks.forEach(column => {
+        column.forEach(bricks => bricks.visible = true);
+    });
+}
+
 // Draw Everything
 function draw() {
     // clear canvas
@@ -113,8 +176,11 @@ function drawScore() {
     ctx.fillText(`Score: ${score}`, canvas.width - 100, 30)
 };
 
+
+// Update canvas drawing and animation
 function update () {
     movePaddle();
+    moveBall();
 
     // Draw Everything
     draw();
