@@ -202,7 +202,7 @@ function keyDown(e) {
 
 // Keyup event
 function keyUp(e) {
-    if(e.key === 'Right' || e.key === 'ArrowRight' || e.key === 'Left' || e.key === 'ArrrowLeft') {
+    if(e.key === 'Right' || e.key === 'ArrowRight' || e.key === 'Left' || e.key === 'ArrowLeft') {
         paddle.dx = 0;
     }
 }
